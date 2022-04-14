@@ -1,0 +1,91 @@
+% packages.tex
+
+% Silence noise from imported packages
+\usepackage{silence}
+\WarningFilter{microtype}{protrusion codes list}
+
+% Page geometry
+\usepackage{geometry}
+
+% Set document language
+\usepackage[english]{babel}
+
+% Import extra math symbols
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+% Use system fonts
+\usepackage{fontspec}
+\usepackage{unicode-math}
+
+% Extra math symbols
+\usepackage{mathrsfs}
+\usepackage[mathcal]{euscript}
+
+% Typesetting chemistry stuff
+\usepackage[version=4]{mhchem}
+
+% Typesetting units
+\usepackage{siunitx}
+
+% Microtype
+\usepackage[stretch=15,shrink=15,step=1]{microtype}
+
+% Set space between lines
+\usepackage{setspace}
+
+% Standard color definitions
+\usepackage{xcolor}
+
+% Typesetting inline fractions
+\usepackage{nicefrac}
+
+% Errors 
+\usepackage{checkend}
+
+% PDF graphics
+\usepackage{graphicx}
+
+% Floats
+\usepackage{float}
+
+% Tables
+\usepackage{booktabs}
+
+% Acronyms
+\usepackage[nolist,nohyperlinks]{acronym}
+
+% Comments
+\usepackage{comment}
+\usepackage{marginnote}
+
+% Proper spacing (replace \left with \mleft and \right with \mright)
+\usepackage{mleftright}
+
+% Custom table of contents
+\usepackage[titles]{tocloft}
+
+% Custom headings
+\usepackage{titlesec}
+
+% Custom headers and footers
+\usepackage{fancyhdr}
+
+% Title page commands
+\usepackage{titling}
+
+% Bibliography
+\usepackage[style=phys,autopunct]{biblatex}
+
+% Make empty pages
+\usepackage{emptypage}
+
+% Vector graphics package
+\usepackage{pgf}
+
+% Hyperrefs, should be last unless package specifies to come after
+\usepackage[luatex, bookmarks, pdffitwindow=false, pdfstartview=FitH, pdfdisplaydoctitle, colorlinks, plainpages=false, pdftitle={Lattice models and Monte Carlo methods for simulating DNA origami self-assembly},pdfauthor={Alexander Michael Cumberworth}, pdfpagelabels, hypertexnames, citecolor={blue},linkcolor={teal}, urlcolor={violet}, pdflang={en}, hyperfootnotes=false, breaklinks]{hyperref}
+
+% Must come after hyperref
+\usepackage{cleveref}

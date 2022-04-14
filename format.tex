@@ -1,0 +1,52 @@
+\geometry{verbose,a4paper,tmargin=3.0cm,bmargin=3.0cm,hmargin={3.5cm,3.5cm},headheight=14.5pt}
+
+\setmainfont{STIX Two Text}
+\setmathfont{STIX Two Math}
+
+\tocloftpagestyle{plain}
+%\renewcommand{\cftdotsep}{\cftnodots}
+%\renewcommand{\cftpnumalign}{r}
+%\renewcommand{\cftchapfont}{}
+%\renewcommand{\cftchappagefont}{}
+%\renewcommand{\cftsecleader}{}
+%\renewcommand{\cftsecafterpnum}{\cftparfillskip}
+
+\titleformat{\section}
+    [hang]
+    {\sffamily\Large}
+    {\thesection}
+    {1ex}
+    {\vspace{0ex}}
+
+\titleformat{\subsection}
+    [hang]
+    {\sffamily\Large}
+    {\thesubsection}
+    {1ex}
+    {\vspace{0ex}}
+
+\titleformat{\subsubsection}
+    [hang]
+    {\sffamily\Large}
+    {}
+    {0cm}
+    {\vspace{0ex}}
+
+\fancypagestyle{main}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage}
+
+    \pagenumbering{arabic}
+
+%    \onehalfspacing
+    \doublespacing
+}
+
+\pagestyle{main}
+
+\fancypagestyle{bib}{
+    \singlespacing
+}
+ 
+\renewcommand*{\bibfont}{\small}
+\defbibheading{bibliography}[\bibname]{\section*{#1}\markboth{#1}{#1}}

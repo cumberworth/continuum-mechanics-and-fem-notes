@@ -1,0 +1,736 @@
+\section*{Tensors}
+\label{sec:tensors}
+
+A tensor can be defined as a multilinear map that takes vectors and covectors and outputs real numbers,
+\begin{equation}
+    \vec{T}: V^{*} \times \ldots \times V^{*} \times V \times \ldots \times V \to \mathbb{R},
+\end{equation}
+where $V$ is a vector space, $V^{*}$ is the dual vector space of $V$, $V \times V$ is the Cartesian product of two vector spaces, and $\mathbb{R}$ are the real numbers.
+The order, degree, or rank of a tensor refers to the number of vectors and covectors that a tensor maps from.
+% coordinate system not coordinates? are there vectors that are not invariant?
+A vector that is invariant to a change in coordinates is an order-1 tensor, while a similarly invariant scalar is an order-0 tensor.
+Because the term rank has another meaning in the context of matrices, we will only use order or degree to refer to this property henceforth.
+Tensors allow physical laws to be expressed in a coordinate independent manner.
+
+% should explain summation convention
+There exists a number of different notations for tensors; here we will primarily use Einstein notation, a type of index notation.
+The components of the tensors in some basis set are indexed by superscripts and subscripts.
+Superscripts imply that the quantity follows a covariant coordinate transformation law, while subscripts imply the quantity follows a contravariant transformation law.
+However, in the context of continuum mechanics, the vector spaces are typically Euclidean and expressed with orthonormal basis sets, which allows us to ignore the subtleties of dual vector spaces, and treat everything as a vector.
+We will do so for the remainder of this document, and follow the convention of writing all indices as subscripts.
+We can then more narrowly define a tensor of order $n$ as
+\begin{equation}
+    \vec{T}: \underbrace{\mathbb{R}^{3} \times \ldots \times \mathbb{R}^{3}}_{n \textrm{ times}} \to \mathbb{R}.
+\end{equation}
+An order-2 tensor, for example, may be written in terms of its components in some basis $\unitvec$ as $T(\unitvec_{i}, \unitvec_{j}) = T_{ij}$.
+For vectors $\vec{v}$ and $\vec{w}$ as arguments, we can write $T(\vec{v}, \vec{w}) = T(v_{i} \unitvec_{i}, w_{j} \unitvec_{j}) = v_{i} w_{j} T_{ij}$.
+
+Tensor addition extends the addition operation of vectors, such that, without loss of generality, for some order-2 tensors $\vec{A}$, $\vec{B}$, and $\vec{C}$ in some basis,
+\begin{equation}
+    C_{ij} = A_{ij} + B_{ij}.
+\end{equation}
+Multiplication by a scalar is also trivially extended to tensors,
+\begin{equation}
+    c \vec{T}(\unitvec_{i}, \unitvec_{j}) = cT_{ij}.
+\end{equation}
+Transposition of an order-2 tensor can be defined here as switching the order of the arguments to the mapping,
+\begin{equation}
+    T_{ij}^{\intercal} = \vec{T}(\unitvec_{i}, \unitvec_{j})^{\intercal} = \vec{T}(\unitvec_{j}, \unitvec_{i}) = T_{ji}
+\end{equation}
+Three additional operators can be defined that do not have a clear analogy with vectors.
+The tensor product combines two tensors $\vec{A}$ and $\vec{B}$ of order $n$ and $m$, respectively, to produce a tensor $\vec{C}$ of order $n + m$,
+\begin{equation}
+    \vec{C} = \vec{A} \otimes \vec{B}.
+\end{equation}
+This allows us to write tensors in terms of tensor products of basis vectors.
+If $m = n = 2$, then,
+\begin{align}
+    \vec{C} &= (A_{ij} \unitvec_{i} \otimes \unitvec_{j}) \otimes (B_{kl} \unitvec_{k} \otimes \unitvec_{l}) \nonumber\\
+            &= A_{ij} B_{kl} \unitvec_{i} \otimes \unitvec_{j} \otimes \unitvec_{k} \otimes \unitvec_{l} \nonumber\\
+            &= C_{ijkl} \unitvec_{i} \otimes \unitvec_{j} \otimes \unitvec_{k} \otimes \unitvec_{l}.
+\end{align}
+
+Contraction is an operation that allows the order of a tensor to be lowered.
+Contraction involves pairing two of the input vectors and summing over them.
+When written in a component-free form, there is no standard notation for the contraction operation; here a contraction between indices $i$ and $k$ for an order-4 tensor $\vec{C}$, without loss of generality, will be denoted as
+\begin{equation}
+    \textrm{Cont}_{ik} \vec{C} = C_{ijil} \unitvec_{j} \otimes \unitvec_{l}.
+\end{equation}
+With our assumption of Euclidean space, this pairing can be made more concrete, and becomes the standard dot product between the basis vectors.
+Partial application of the tensor with respect to one or more of its vector arguments can be done with combinations of the tensor product and contraction operations.
+For example, if $\vec{T}$ is an order-2 tensor and $\vec{w}$ a vector, $\vec{T}$ can be applied to $\vec{w}$ to produce a vector $\vec{v}$,
+\begin{align}
+    \vec{T} \vec{w} &= \textrm{Cont}_{jk} [(T_{ij} \unitvec_{i} \otimes \unitvec_{j}) \otimes (w_k \unitvec_{k})] \nonumber\\
+                    &= T_{ij} w_{k} \unitvec_{i} (\unitvec_{j} \cdot \unitvec_{k}) \nonumber\\
+                    &= T_{ij} w_{k} \unitvec_{i} \updelta_{jk} \nonumber\\
+                    &= T_{ij} w_{j} \unitvec_{i} \nonumber\\
+                    &= v_{i} \unitvec_{i} \nonumber\\
+                    &= \vec{v},
+\end{align}
+where $\updelta_{jk}$ is the Kroneker delta placing the tensor.
+We have explicitly shown contraction as a dot product, and by placing the tensor and vector (and more generally two tensors) directly adjacent we imply a tensor product followed by the contraction of the adjacent pair of indices.
+
+Tensors themselves are elements of a vector space.
+As we are assuming Euclidean space for the vector spaces that comprise the vector space the tensors are a part of, we can define inner products for these spaces.
+For order-2 tensors, we can define the inner product the double dot product,
+\begin{align}
+    \langle \vec{A}, \vec{B} \rangle &= \vec{A} : \vec{B} \nonumber\\
+                                     &= A_{ij} B_{ij}.
+\end{align}
+The norm is then
+\begin{align}
+    \lvert \vec{T} \rvert &= \sqrt{\vec{T} : \vec{T}} \nonumber\\
+                          &= \sqrt{T_{ij} T_{ij}}.
+\end{align}
+It is also straightforward to define the determinant of order-2 tensors, with
+\begin{equation}
+    \textrm{det}(\vec{T}) = \epsilon_{ijk} T_{1i} T_{2k} T_{3j},
+\end{equation}
+where $\epsilon_{ijk}$ is the Levi-Civita, or permutation, symbol.
+The trace of an order-2 tensor is simply the contraction of the two indices,
+\begin{equation}
+    \textrm{tr}(\vec{T}) = T_{ii}.
+\end{equation}
+
+The above operators also extend to the concept of tensor fields.
+With tensor fields we can also take derivatives with respect to the variables that the tensor depends on.
+The gradient of a tensor $\vec{T}(\vec{x})$, where $\vec{x}$ is some vector and we continue to use the assumption of Euclidean space and an orthonormal basis, is defined as
+\begin{equation}
+    \nabla \vec{T}(\vec{x}) = \frac{\partial \vec{T}(\vec{x})}{\partial x_{i}} \otimes \unitvec_{i}.
+\end{equation}
+For an order-2 tensor,
+\begin{equation}
+    \nabla \vec{T}(\vec{x}) = \frac{\partial T_{ij}}{\partial x_k} \unitvec_{i} \otimes \unitvec_{j} \otimes \unitvec_{k}.
+\end{equation}
+The divergence of a tensor, again assuming Euclidean space and an orthonormal basis, is defined as
+\begin{equation}
+    \nabla \cdot \vec{T}(\vec{x}) = \frac{\partial \vec{T}(\vec{x})}{\partial x_{i}} \cdot \unitvec_i.
+\end{equation}
+For an order-2 tensor,
+\begin{equation}
+    \nabla \cdot \vec{T}(\vec{x}) = \frac{\partial T_{ij}}{\partial x_j} \unitvec_{i}.
+\end{equation}
+Note that the gradient operator acts to increase the order of the tensor by one, while the divergence operator acts to decrease the order of the tensor by one.
+It is not uncommon for the definitions of the gradient and the tensor to be defined such that the tensor product is applied from the left rather than from the right (we have written the divergence as a dot product, but as discussed above this can be expanded as a tensor product followed by a contraction).
+%directional derivatives
+%derivatives of functions of tensors
+
+% should I mention the metric tensor? It might help make it more clear what is going on with E e thing
+% reading this many months later, this part is very unclear
+A change of coordinates of tensor fields requires some additional considerations.
+To derive the general formula would require a discussion of differential geometry, so we will simply give the results here.
+For a vector field $\vec{v}(\vec{x})$, to express the same vector on the field variable $\vec{y} = \vec{y}(\vec{x})$,
+\begin{align}
+    \vec{\bar{v}}(\vec{y}) &= \frac{\partial y_{i}}{\partial x_{j}} v_{j}(\vec{x}) \unitvec_{i}^{'} \nonumber\\
+                     &= \mleft[\frac{\partial y_{i}}{\partial x_{j}} \unitvec_{i}^{'} \otimes \unitvec_{j} \mright] [ v_{k}(\vec{x}) \unitvec_{k} ] \nonumber\\
+                     &= \vec{F} \vec{v}(\vec{x}), \label{eq:coordinate-transform-tensor}
+\end{align}
+where $\unitvec_{i}^{'}$ are the basis vectors chosen for expressing $\vec{y}$, and $\unitvec_{j}$ are the basis vectors chosen to express $\vec{x}$.
+$\vec{F}$ is not necessarily a tensor, but as we restrict ourselves to Cartesian coordinate systems, it does behave as one.
+For a tensor field, we must apply $\vec{F}$ a number of times equal to the order of the tensor.
+For an order-2 tensor,
+\begin{equation}
+    \vec{\bar{T}}(\vec{x}) = \vec{F} \vec{T}(\vec{y}) \vec{F}^{\intercal}.
+\end{equation}
+
+\section*{Solid mechanics and elasticity}
+\label{sec:continuum-mechanics}
+
+In continuum mechanics, it is common to refer to two different frames of reference.
+The first is known as the spatial, or Eulerian description.
+In the spatial description, quantities are written as functions of the position in the physical space the system exists in.
+The second is known as the material, or Lagrangian, description.
+In material description, quantities are instead written as functions of the position in the material being described.
+To do so, a reference configuration is used, typically the undeformed configuration before any forces have been applied to the system.
+The spatial description is commonly used in fluid mechanics, as one is typically interested in properties of the fluid at a particular point in space.
+In contrast, the material description is commonly used in solid mechanics, as one is typically interested in properties of the solid at a particular point of the system, regardless of where it has moved to after deformation in space.
+
+Kinematics is the framework of describing how the system deforms.
+It is independent from the forces that actually lead to the deformation, in that it is simply a mathematical description of the state of the system.
+The spatial position vectors, their bases, and their indices will be written in lower case,
+\begin{equation}
+    \vec{x} = x_{i} \unitvec_{i},
+\end{equation}
+while the material position vectors, their basis vectors, and their indices will be written in upper case,
+\begin{equation}
+    \vec{X} = X_{I} \Unitvec_{I}.
+\end{equation}
+Here, we will only consider Cartesian coordinates, and so the basis vectors of the material and reference frames will be the same, i.e. $\unitvec_{i} = \Unitvec_{i}$.
+The spatial vectors are defined on a domain $B$, the set of points that the deformed system exists in, while the material vectors are defined on a domain $B_{0}$, the set of points that the reference configuration exists in.
+We can write the spatial vectors as a function of the material vectors, and vice versa with the deformation mapping, where by deformation mapping we mean $\phi(\vec{X}) = \vec{x}(\vec{X})$ or its inverse $\phi^{-1}(\vec{x}) = \vec{X}(\vec{x})$.
+The deformation of the system in the material reference can be described by a deformation vector field,
+\begin{align}
+    \vec{u}(\vec{X}) &= \vec{x}(\vec{X}) - \vec{X} \nonumber\\
+    \vec{u}(\vec{X}) &= [x_{I}(\vec{X}) - X_I] \Unitvec_{I},
+\end{align}
+while in the spatial reference it can be described as
+\begin{align}
+    \vec{\bar{u}}(\vec{x}) &= \vec{x} - \vec{X}(\vec{x}) \nonumber\\
+    \vec{\bar{u}}(\vec{x}) &= [x_{i} - X_i(\vec{x})] \unitvec_{i},
+\end{align}
+although we will not use this form.
+
+While here we do use the same basis set in both the material and spatial reference, we will continue to differentiate between the two.
+This is because we will generally assume the field quality of many variables, writing them without function notation, and use the convention of writing the basis vectors to reflect whether quality is in the material or spatial reference frame.
+To be clear, it is important to keep track of whether a field is a directly a function of $\vec{x}$ or $\vec{X}$, rather than indirectly through a deformation mapping.
+For example, there is a difference between $\vec{\bar{u}}(\vec{X} = \vec{x}) = \vec{x}(\vec{x}) - \vec{x}$, which is not correct, and $\vec{\bar{u}}(\vec{X}[\vec{x}]) = \vec{x}(\vec{X}[\vec{x}]) - \vec{X}(\vec{x})$, in which we write the deformation as a direct function $\vec{X}$ but use $\vec{x}$ as the independent variable.
+
+The deformation gradient is a tensor field of both $\vec{X}$ and $\vec{x}$, and is defined as
+\begin{align}
+    \vec{F} &= \nabla_{0} \vec{x} \nonumber\\
+            &= \frac{\partial x_{i}}{\partial X_{J}} \unitvec_{i} \otimes \Unitvec_{J} \nonumber\\
+            &= F_{iJ} \unitvec_{i} \otimes \Unitvec_{J},
+\end{align}
+where $\nabla_{0}$ is the gradient with respect to the material coordinates.
+Note that the deformation tensor is also the tensor defined in \cref{eq:coordinate-transform-tensor} for the general changing of coordinates of the underlying field.
+This means that it can be used to convert a field from a material reference frame to spatial reference frame.
+The inverse deformation gradient,
+\begin{equation}
+    \vec{F}^{-1} = \frac{\partial X_{I}}{\partial x_{j}} \Unitvec_{I} \otimes \unitvec_{j},
+\end{equation}
+can be used to convert from a spatial reference frame to a material reference frame.
+The deformation gradient can written in terms of the deformation with simple substitution,
+\begin{align}
+    \vec{F} &= \nabla_{0} (\vec{u} + \vec{X}) \nonumber\\
+            &= \nabla_{0} \vec{u} + \nabla_{0} \vec{X} \nonumber\\
+            &= \frac{\partial u_{i}}{\partial X_J} \unitvec_{i} \otimes \Unitvec_{J} + \frac{\partial X_{I}}{\partial X_{J}} \Unitvec_{I} \otimes \Unitvec_{J} \nonumber\\
+            &= \frac{\partial u_{i}}{\partial X_J} \unitvec_{i} \otimes \Unitvec_{J} + \delta_{IJ} \Unitvec_{I} \otimes \Unitvec_{J} \nonumber\\
+            &= \nabla_{0} \vec{u} + \vec{I},
+\end{align}
+where $\vec{I}$ is the order-2 identity tensor.
+The deformation tensor can also be considered as a map between infinitesimal position vectors in the spatial and material description,
+\begin{equation}
+    \textrm{d} \vec{x} = \vec{F} \textrm{d} \vec{X}.
+\end{equation}
+
+It is also important to be able to describe how distances between points in the material and spatial descriptions are related.
+If $\textrm{d} s$ and $\textrm{d} S$ are infinitesimal distances in the spatial and material description, respectively, then
+\begin{align}
+    (\textrm{d} s)^{2} &= \textrm{d} \vec{x} \textrm{d} \vec{x} \nonumber\\
+                       &= (\vec{F} \textrm{d} \vec{X}) (\vec{F} \textrm{d} \vec{X}) \nonumber\\
+                       &= (\textrm{d} \vec{X} \vec{F}^{\intercal}) (\vec{F} \textrm{d} \vec{X}) \nonumber\\
+                       &= \textrm{d} \vec{X} (\vec{F}^{\intercal} \vec{F}) \textrm{d} \vec{X} \nonumber\\
+                       &= \textrm{d} \vec{X} ([F_{iJ} \Unitvec_{J} \otimes \unitvec_{i}] [F_{kL} \unitvec_{k} \otimes \Unitvec_{L}]) \textrm{d} \vec{X} \nonumber\\
+                       &= \textrm{d} \vec{X} (F_{iJ} F_{kL} [\unitvec_{i} \cdot \unitvec_{k}] \Unitvec_{J} \otimes \Unitvec_{L}) \textrm{d} \vec{X} \nonumber\\
+                       &= \textrm{d} \vec{X} (F_{iJ} F_{kL} \delta_{ik} \Unitvec_{J} \otimes \Unitvec_{L}) \textrm{d} \vec{X} \nonumber\\
+                       &= \textrm{d} \vec{X} (F_{iJ} F_{iL} \Unitvec_{J} \otimes \Unitvec_{L}) \textrm{d} \vec{X} \nonumber\\
+                       &= \textrm{d} \vec{X} \vec{C} \textrm{d} \vec{X},
+\end{align}
+where $\vec{C}$ is known as the right Cauchy-Green tensor, and
+\begin{align}
+    (\textrm{d} s)^{2} - (\textrm{d} S)^{2} &= \textrm{d} \vec{X} \vec{C} \textrm{d} \vec{X} - \textrm{d} \vec{X} \textrm{d} \vec{X} \nonumber\\
+                                            &= \textrm{d} \vec{X} (\vec{C} \textrm{d} \vec{X} - \textrm{d} \vec{X}) \nonumber\\
+                                            &= 2 \textrm{d} \vec{X} \mleft[ \frac{1}{2} ( \vec{C} - \vec{I} ) \mright] \textrm{d} \vec{X} \nonumber\\
+                                            &= 2 \textrm{d} \vec{X} \vec{E} \textrm{d} \vec{X},
+\end{align}
+where $\vec{E}$ is the Green-Lagrange strain tensor.
+The Green-Lagrange strain tensor can be expressed directly as a function of the deformation field,
+\begin{align}
+    \vec{E} &= \frac{1}{2} ( \vec{C} - \vec{I} ) \nonumber\\
+            &= \frac{1}{2} ( \vec{F}^{\intercal} \vec{F} - \vec{I} ) \nonumber\\
+            &= \frac{1}{2} \mleft[ (\nabla_{0} \vec{u} + \vec{I})^{\intercal} ( \nabla_{0} \vec{u} + \vec{I}) - \vec{I} \mright] \nonumber\\
+            &= \frac{1}{2} \mleft[ \nabla_{0} \vec{u} + (\nabla_{0} \vec{u})^{\intercal} + (\nabla_{0} \vec{u})^{\intercal} (\nabla_{0} \vec{u}) \mright] \nonumber\\
+            &= \frac{1}{2} \mleft( \frac{\partial u_{I}}{\partial X_{J}} + \frac{\partial u_{J}}{\partial X_{I}} + \frac{\partial u_{K}}{\partial X_{I}} \frac{\partial u_{K}}{\partial X_{J}} \mright) \Unitvec_{I} \otimes \Unitvec_{J}.
+\end{align}
+
+The Green-Lagrange strain tensor contains a term that is nonlinear in $\vec{u}$.
+If the strain is small enough, or $\lvert \nabla_{0} \vec{u} \rvert << 1$, the infinitesimal strain assumption may be used to linearize the tensor.
+Under this assumption, the Green-Lagrange strain tensor is approximately equal to the infinitesimal strain tensor,
+\begin{align}
+    \epsilon &= \frac{1}{2} \mleft[ \nabla_{0} \vec{u} + (\nabla_{0} \vec{u})^{\intercal} \mright] \nonumber\\
+             &= \frac{1}{2} \mleft( \frac{\partial u_{I}}{\partial X_{J}} + \frac{\partial u_{J}}{\partial X_{I}} \mright) \Unitvec_{I} \otimes \Unitvec_{J}.
+\end{align}
+The difference between taking the gradient with respect to the material or the spatial derivatives also becomes insignificant, so $\nabla_{0} \vec{u} \approx \nabla \vec{u}$.
+
+A description of the forces on the system begins with a definition of the stress vector field $\vec{t}^{\vec{\hat{n}}}(\vec{x})$ in the spatial reference frame, which is the force $\vec{f}^{\vec{\hat{n}}}(\vec{x})$ per area $a$ for a particular surface with normal vector $\vec{\hat{n}}$,
+\begin{equation}
+    \vec{t}^{\vec{\hat{n}}}(\vec{x}) = \lim_{\upDelta a \to 0} \frac{\upDelta \vec{f}^{\vec{\hat{n}}}(\vec{x})}{\upDelta a}.
+\end{equation}
+Stress vectors defined on boundary surfaces of the system are known as traction vectors.
+The Cauchy stress tensor $\vec{\sigma}$ is an order-2 tensor defined such that
+\begin{equation}
+    \vec{t}^{\vec{\hat{n}}} = \vec{\sigma} \vec{\hat{n}}.
+\end{equation}
+In other words, partial application of the tensor to the surface normal maps to the stress vector on that surface.
+The stress tensor field contains all the stress information for the system.
+The Cauchy stress tensor can also be written as the sum of the tensor product of the stress vectors on the surfaces normal to the basis vectors,
+\begin{equation}
+    \vec{\sigma} = \vec{t}^{\unitvec_{i}} \otimes \unitvec_{i}.
+\end{equation}
+The stress vector can can be decomposed into the sum of the normal stress $\vec{t}^{\vec{\hat{n}}}_{\textrm{nn}}$ and the shear stress $\vec{t}^{\vec{\hat{n}}}_{\textrm{ns}}$,
+\begin{align}
+    \vec{t}^{\vec{\hat{n}}} &= \vec{t}^{\vec{\hat{n}}}_{\textrm{nn}} + \vec{t}^{\vec{\hat{n}}}_{\textrm{ns}} \nonumber\\
+                            &= (\vec{t}^{\vec{\hat{n}}} \cdot \vec{\hat{n}} ) \vec{\hat{n}} +  \vec{\hat{n}} \times (\vec{t}^{\vec{\hat{n}}} \times \vec{\hat{n}}).
+\end{align}
+
+% I should try proving these relations
+% This is one part where my understanding is just not good enough
+The Cauchy stress tensor is in the spatial reference frame, and gives the force per unit deformed area.
+In other words, it gives the stress vectors for the deformed configuration.
+To work in the material description, it is necessary to have stress vectors that give a transformed force per unit undeformed area.
+These stress vectors are not the true physical stresses, but rather are convenient mathematical constructions, pseudo stresses, which allow us to discuss forces relative to the reference configuration.
+The first Piola-Kirchhoff stress tensor gives the force per unit undeformed area, but the force vectors are otherwise untransformed.
+The resulting pseudo stress vectors $\vec{T}^{\vec{\hat{N}}}$ on undeformed surface $\vec{\hat{N}}$ of area $A$ are related to the stress vectors as
+\begin{align}
+    \textrm{d} \vec{f}^{\vec{\hat{n}}} &= \vec{t}^{\vec{\hat{n}}} \textrm{d} a \nonumber\\
+                                       &= \vec{T}^{\vec{\hat{N}}} \textrm{d} A,
+\end{align}
+while the pseudo-stress vector can be produced from the first Piola-Kirchhoff stress tensor $\vec{P}$ with
+\begin{equation}
+    \vec{T}^{\vec{\hat{N}}} = \vec{P} \vec{\hat{N}}.
+\end{equation}
+This stress tensor is a mixed tensor; it applies to one vector in the material reference, the surface normal vector, and another in the spatial reference, the direction in the spatial reference that the stress is desired in.
+Because we are changing the coordinates of part of the tensor, the first Piola-Kirchhoff stress tensor can be related to the Cauchy stress tensor with the deformation gradient, creating a stress tensor that can be applied to surface normal vectors in the material reference.
+We additionally need to scale the force as we want the force per undeformed unit area, and it can be be shown that this involves multiplying by the determinant of the deformation vector,
+\begin{equation}
+    \vec{P} = \mathrm{det}(\vec{F}) \vec{\sigma} \vec{F^{-\intercal}}.
+\end{equation}
+
+However, we want a stress tensor that is fully in the material reference frame.
+In general, a transformed force can then be related to the untransformed force as
+\begin{equation}
+    \mathrm{d} \boldsymbol{\mathcal{F}} = \vec{F}^{-1} \textrm{d} \vec{f}\\
+\end{equation}
+and an associated pseudo stress tensor defined as
+\begin{equation}
+    \mathrm{d} \boldsymbol{\mathcal{F}}^{\vec{\hat{N}}} = \vec{\widetilde{T}}^{\vec{\hat{N}}} \textrm{d} A.
+\end{equation}
+The second Piola-Kirchhoff stress tensor $\vec{S}$ produces the desired pseudo-stress vectors that give the transformed force per undeformed area,
+\begin{equation}
+    \vec{\widetilde{T}}^{\vec{\hat{N}}} = \vec{S} \vec{\hat{N}}.
+\end{equation}
+The second Piola-Kirchoff tress tensors is related to the first Piola-Kirchoff stress and tensor and the Cauchy stress tensor as
+\begin{align}
+    \vec{S} &= \vec{F}^{-1} \vec{P} \nonumber\\
+            &= \textrm{det}( \vec{F} ) \vec{F}^{-1} \vec{\sigma} \vec{F}^{-\intercal}.
+\end{align}
+Under the infinitesimal strain approximation, because $\nabla_{0} \vec{u} \approx \nabla \vec{u}$, the difference between the different stress tensors becomes insignificant, so $\vec{S} \approx \vec{\sigma}$.
+
+The stress-strain relationships can only be derived empirically.
+These are also known as constitutive relationships, and are material specific.
+Here, we are focused on elastic materials, and particularly hyperelastic materials, which are a subset of Cauchy elastic materials.
+In Cauchy elastic materials, the stress field only depends on the current state.
+For hyperelastic materials, it is possible to define a Helmholtz free-energy potential.
+If this Helmholtz free-energy potential is only a function of a deformation or strain tensor, then it is referred to as the strain energy density function, $W$, which has units of energy per unit mass.
+
+To derive a linear relationship between the stress and strain, we can do a Taylor expansion of the strain energy density function.
+If we also assume infinitesimal strain, we can write the strain energy density as a function of the infinitesimal strain tensor.
+Then, if we retain only the first three terms while expanding around an unstrained configuration, $\vec{\epsilon} = 0$,
+\begin{equation}
+    W(\vec{\epsilon}) = C_{0} + C_{ij} \epsilon_{ij} + \frac{1}{2} C_{ijkl} \epsilon_{ij} \epsilon_{kl},
+\end{equation}
+where $C_0$ is a constant scalar, $C_{ij}$ are the components of a constant vector, and $C_{ijkl}$ are the components of a constant order-4 tensor.
+We can set $C_0 = 0$, as this is just a reference energy.
+It is possible to show with thermodynamic arguments and a number of axioms and constraints that
+\begin{equation}
+    \vec{\sigma} = \frac{\partial W(\vec{\epsilon})}{\partial \vec{\epsilon}}.
+\end{equation}
+If we take the derivative, then
+\begin{align}
+    \vec{\sigma} &= \mleft[ C_{ij} \frac{\partial \epsilon_{ij}}{\partial \epsilon_{mn}} + \frac{1}{2} C_{ijkl} \mleft( \frac{\partial \epsilon_{ij}}{\partial \epsilon_{mn}} \epsilon_{kl} + \epsilon_{ij} \frac{\partial \epsilon_{kl}}{\partial \epsilon_{mn}} \mright) \mright] \unitvec_{m} \otimes \unitvec_{n} \nonumber\\
+                &= \mleft[ C_{ij} \updelta_{im} \updelta_{jn} + \frac{1}{2} C_{ijkl} ( \updelta_{im} \updelta_{jn} \epsilon_{kl} + \epsilon_{ij} \updelta_{km} \updelta_{ln} ) \mright] \unitvec_{m} \otimes \unitvec_{n} \nonumber\\
+                &= \mleft[ C_{mn} + \frac{1}{2} (C_{mnkl} \epsilon_{kl} + C_{ijmn} \epsilon_{ij} ) \mright] \unitvec_{m} \otimes \unitvec_{n} \nonumber\\
+                &= \mleft( C_{mn} + C_{mnkl} \epsilon_{kl} \mright) \unitvec_{m} \otimes \unitvec_{n},
+\end{align}
+where in the final step we have defined the constant order-4 tensor to have major symmetry, i.e. $C_{mnkl} = C_{klmn}$, for convenience.
+Because $\epsilon$ is symmetric, the constant order-4 tensor will also have minor symmetry, i.e. $C_{mnkl} = C_{nmkl}$.
+We can see that $C_{mn} \unitvec_{m} \otimes \unitvec_{n}$ is the residual stress, and so if our reference configuration is unstressed, it is 0.
+Finally, the order-4 tensor $C_{mnkl} \unitvec_{m} \otimes \unitvec_{n}$ is referred to as the stiffness tensor.
+
+We can narrow our focus further, as we only consider isotropic materials, to simplify the constitutive relations.
+An isotropic tensor is one in which the components are invariant under transformations, and can be expressed as
+\begin{equation}
+    C_{ijkl} = \lambda \updelta_{ij} \updelta_{kl} + \mu (\updelta_{ik} \updelta_{jl} + \updelta_{il} \updelta_{jk}) + \kappa (\updelta_{ik} \updelta_{jl} - \updelta_{il} \updelta_{jk}),
+\end{equation}
+where $\lambda$, $\mu$, and $\kappa$ are known as the Lam\'{e} parameters.
+Because the stiffness tensor has minor symmetry, the third term will cancel, leading to
+\begin{align}
+    W(\vec{\epsilon}) &= \frac{1}{2} (\lambda \updelta_{ij} \updelta_{kl} + 2 \mu \updelta_{ik} \updelta_{jl}) \epsilon_{ij} \epsilon_{kl} \nonumber\\
+                &= \frac{1}{2} \lambda \epsilon_{ii} \epsilon_{kk} + \mu \epsilon_{il} \epsilon_{il} \nonumber\\
+                &= \frac{1}{2} \lambda \textrm{tr} (\vec{\epsilon})^{2} + \mu \vec{\epsilon} : \vec{\epsilon}
+\end{align}
+and
+\begin{align}
+    \vec{\sigma} &= [ (\lambda \updelta_{ij} \updelta_{kl} + 2 \mu \updelta_{ik} \updelta_{jl} ) \epsilon_{kl}] \unitvec_{i} \otimes \unitvec_{j} \nonumber\\
+                 &= (\lambda \updelta_{ij} \epsilon_{kk} + 2 \mu \epsilon_{ij}) \unitvec_{i} \otimes \unitvec_{j} \nonumber\\
+                 &= \lambda \textrm{tr} (\vec{\epsilon}) \vec{I} + 2 \mu \vec{\epsilon}.
+\end{align}
+Typically the equations are written in terms of the Young's modulus $E$ and the Poisson's ratio $\nu$, which have a more direct link to experimentally measurable quantities, and are related to the Lam\'{e} parameters with
+\begin{equation}
+    \lambda = \frac{\nu E}{(1 + \nu)(1 - 2 \nu)}
+\end{equation}
+and
+\begin{equation}
+    \mu = \frac{E}{2(1 + \nu)}.
+\end{equation}
+
+% I don't really understand how to derive this.
+To begin to include nonlinearity, we can remove the assumption of infinitesimal strain and use the Green-Lagrange strain tensor in the above expressions.
+This is known as geometrically nonlinear elasticity, or the Saint Venant-Kirchhoff model.
+The constitutive relationship itself is still linear, although if large strains are being used, the approximation of using only the three terms of the expansion of the energy is likely to become poor.
+The strain energy density becomes
+\begin{equation}
+    W(\vec{E}) = \frac{1}{2} \lambda \textrm{tr} (\vec{E})^{2} + \mu \vec{E} : \vec{E},
+\end{equation}
+and the stress tensor, now the second Piola-Kirchhoff stess tensor, is
+\begin{equation}
+    \vec{S} = \lambda \textrm{tr} (\vec{E}) \vec{I} + 2 \mu \vec{E}.
+\end{equation}
+
+From the balance of linear momentum, it can be shown that in a material description
+\begin{equation}
+    \nabla_{0} \cdot (\vec{F} \vec{S}) + \rho_{0} \vec{f} = \rho_{0} \frac{\partial^{2} \vec{u}}{\partial \vec{t}^{2}},
+\end{equation}
+where $\vec{f}$ is the body force, and all tensors (including vectors) are fields on $\vec{X}$.
+Here we are only interested in static problems, so the right-hand-side is zero.
+We will also not be applying any body forces, so we will also set that to zero.
+From the balance of angular momentum it can be shown that the stress tensor is symmetric, or
+\begin{equation}
+    \vec{S} = \vec{S}^{\intercal}.
+\end{equation}
+For a linear elastic model, we can substitute in for the stress tensor, and then for the deformation and strain tensors to produce a second order PDE in terms of the deformation field $\vec{u}$,
+\begin{align}
+        0 &= \nabla \cdot [\vec{F} (\lambda \textrm{tr} (\vec{\epsilon}) \vec{I} + 2 \mu \vec{\epsilon}) ] \nonumber\\
+          &= \nabla \cdot [\lambda \textrm{tr} (\vec{\epsilon}) \vec{F} + 2 \mu \vec{F} \vec{\epsilon}] \nonumber\\
+          &= \nabla \cdot \mleft[ \frac{\lambda}{2} \textrm{tr} ( \nabla \vec{u} + [\nabla \vec{u}]^{\intercal})(\nabla \vec{u} + \vec{I}) + \mu (\nabla \vec{u} + \vec{I})(\nabla \vec{u} + [\nabla \vec{u}]^{\intercal}) \mright].
+\end{align}
+Because we are making the infinitesimal strain assumption, we ignore the difference between derivatives with respect to the material coordinates and those with respect to the spatial coordinates, and have written everything in lower case for simplicity.
+As the expression becomes quite long, it is best to consider it in pieces.
+For the trace,
+\begin{align}
+    \textrm{tr} (\nabla \vec{u} + [\nabla \vec{u}]^{\intercal}) &= \frac{\partial u_{i}}{\partial x_{i}} + \frac{\partial u_{i}}{\partial x_{i}} \nonumber\\
+                                                                    &= 2 \frac{\partial u_{i}}{\partial x_{i}}.
+\end{align}
+For the whole first term $T_1$,
+\begin{align}
+    T_1 &= \nabla \cdot \mleft[ \frac{\lambda}{2} \textrm{tr} ( \nabla \vec{u} + [\nabla \vec{u}]^{\intercal})(\nabla \vec{u} + \vec{I}) \mright] \nonumber\\
+        &= \mleft[ \frac{\partial}{\partial x_{i}} \unitvec_{i} \mright] \mleft[ \lambda \frac{\partial u_j}{\partial x_{j}} (\frac{\partial u_{l}}{\partial x_{k}} + \updelta_{kl}) \unitvec_{l} \otimes \unitvec_{k} \mright] \nonumber\\
+        &= \lambda \mleft[ \frac{\partial}{\partial x_{k}} \mleft( \frac{\partial u_{j}}{\partial x_{j}} \frac{\partial u_{l}}{\partial x_{k}} \mright) + \frac{\partial^{2} u_{j}}{\partial x_{l} \partial x_{j}} \mright] \unitvec_{l} \nonumber\\
+        &\approx \lambda \mleft[ \frac{\partial^{2} u_{j}}{\partial x_{l} \partial x_{j}} \mright] \unitvec_{l} \nonumber\\
+        &= \lambda \nabla (\nabla \cdot \vec{u}),
+\end{align}
+where we have discarded terms involving multiples of derivatives of $\vec{u}$ as they become insignificant under the infinitesimal strain assumption.
+For the second term $T_2$,
+\begin{align}
+    T_2 &= \nabla \cdot [ \mu ( \nabla \vec{u} + \vec{I})(\nabla \vec{u} + [\nabla \vec{u}]^{\intercal})] \nonumber\\
+        &= \nabla \cdot \mu [\nabla \vec{u} \nabla \vec{u} + \nabla \vec{u} (\nabla \vec{u})^{\intercal} + \nabla \vec{u} + (\nabla \vec{u})^{\intercal}] \nonumber\\
+        &\approx \nabla \cdot \mu [\nabla \vec{u} + (\nabla \vec{u})^{\intercal}] \nonumber\\
+        &= \mu \mleft[ \frac{\partial}{\partial x_{i}} \unitvec_{i} \mright] \mleft[ \frac{\partial u_{j}}{\partial x_{k}} + \frac{\partial u_{k}}{\partial x_{j}} \mright] \unitvec_{j} \otimes \unitvec_{k} \nonumber\\
+        &= \mu \mleft(\frac{\partial^{2} u_{j}}{\partial x_{k}^{2}} + \frac{\partial u_{k}}{\partial x_{k} \partial x_{j}} \mright) \unitvec_{j} \nonumber\\
+        &= \mu [\nabla \cdot \nabla \vec{u} + \nabla (\nabla \cdot \vec{u})],
+\end{align}
+where we have again dropped terms with multiples of derivatives of $\vec{u}$.
+Together this gives
+\begin{equation}
+    \mu \nabla \cdot \nabla \vec{u} + (\lambda + \mu) \nabla (\nabla \cdot \vec{u}) = 0.
+\end{equation}
+
+If instead of linear elasticity, we wish to derive an equivalent form for a geometrically nonlinear elastic model, the expression become much more cumbersome.
+It can be convenient to work instead with an expression for the strain energy density function.
+With this, the total energy of the system can be calculated by integrating over the total system volume.
+The energy will also have contributions from work done by external body and traction forces applied to the system, so two additional integration terms are needed,
+\begin{equation}
+    \Pi(\vec{u}) = \int_{\Omega} W(\vec{u}) \textrm{d} \vec{x} - \int_{\Omega} \vec{f} \cdot \vec{u} \textrm{d} \vec{x} - \int_{\partial \Omega} \vec{t} \cdot \vec{u} \textrm{d} s,
+\end{equation}
+where $\Omega$ is the system volume, $\partial \Omega$ is the boundary, and $\vec{t}$ is the traction force.
+% should then say we don't look at body or traction forces... but actually how do I incorporate boundary conditions here, and what about the resulant traction forces from applied displacement boundary conditions?
+From this expression, using Hamilton's principle and variational calculus, it is possible to derive the second order \ac{PDE} that results from directly using the balance of momentum.
+However, as we will see later, when estimating a solution with the \ac{FEM}, it is actually a variational form that is required.
+
+\section*{Euler-Bernoulli beam theory}
+\label{sec:euler-bernoulli-beam-theory}
+
+It is generally not possible to find a closed form solution for the deformation field without making some assumptions about the kinematics.
+Euler-Bernoulli beam theory is one such set of assumptions that can be applied when the bending and stretching of a linearly elastic, isotropic beam is being modeled.
+The theory is not internally consistent, and yet it has found extensive use in modeling such systems.
+Essentially, it amounts to assuming that the beam can be considered as a series of rigid plates along the beam axis which rotate about another axis perpendicular to the beam axis such that on one side of the beam there is compression and on the other side extension.
+The plates do not slide relative to each other, so lines that are perpendicular to the plates stay parallel with each other upon bending.
+It also assumes that this bending happens within a plane, which then allows the problem to be reduced to a 1D one.
+If the beam axis is along the $x$ axis, and the bending occurs in the $xy$ plane, then the deformation field corresponding to these assumptions can be written as
+% this is actually dependent on Y
+\begin{equation}
+    \vec{u}(X) = \mleft[a(X) - Y \frac{\mathrm{d} w(X)}{\mathrm{d} X} \mright] \unitvec_{x} + w(X) \unitvec_{y},
+\end{equation}
+where $a(X)$ and $w(X)$ are unknown functions.
+We have written the derivative with respect to $X$ here as it is more convenient.
+
+% cref these equations, and reword
+If we plug these back into the expression for the infinitesimal strain tensor, we will find that the $\epsilon_{yx}$ component is 0, consistent with the assumptions made of the kinematics.
+Then,
+\begin{equation}
+    \vec{\epsilon} = \mleft[ \frac{\mathrm{d} a(X)}{\mathrm{d} X} - Y \frac{\mathrm{d}^{2} w(X)}{\mathrm{d} X^{2}} \mright]\unitvec_{x} \otimes \unitvec_{x}.
+\end{equation}
+% cref the stress-strain relation here
+The stress tensor is then
+\begin{align}
+    \vec{\sigma} &= (\lambda + 2 \mu) \mleft[ \frac{\mathrm{d} a(X)}{\mathrm{d} X} - Y \frac{\mathrm{d}^{2} w(X)}{\mathrm{d} X^{2}} \mright]\unitvec_{x} \otimes \unitvec_{x} \nonumber\\
+                 &= E \mleft[ \frac{\mathrm{d} a(X)}{\mathrm{d} X} - Y \frac{\mathrm{d}^{2} w(X)}{\mathrm{d} X^{2}} \mright]\unitvec_{x} \otimes \unitvec_{x},
+\end{align}
+where the second line follows because Poisson's ratio $\nu = 0$ under the assumptions of beam theory.
+
+If we tried to plug this into the expression for the balance of momentum, we would find the equations could not be satisfied if there are any forces applied to the system in the $y$ direction to bend the beam, as all other terms related to the force are 0.
+Euler-Bernoulli beam theory proceeds by carrying out a force and moment balance at each point along the beam axis.
+Assume the beam has a force applied axially at each point by $f(X)$ with units of force per unit length, and a force applied transversely at each point by $q(X)$, also with units of force per unit length.
+If $N(X)$ is the normal reactive force, $V(X)$ is the transverse, or shear, reactive force, and $M(X)$ is the reactive moment around the $z$ axis, then for each element of the beam along the beam axis
+\begin{align}
+    \frac{\mathrm{d} N(X)}{\mathrm{d} X} + f(X) &= 0 \label{eq:normal-force-balance}\\
+    \frac{\mathrm{d} V(X)}{\mathrm{d} X} + q(X) &= 0 \label{eq:shear-force-balance}\\
+    V(x) - \frac{\mathrm{d} M(X)}{\mathrm{d} X} &= 0. \label{eq:moment-balance}
+\end{align}
+% the last line is not so obvious, consider adding derivation
+These reactive forces and moment can be written in terms of the stress tensor,
+\begin{align}
+    N(X) = \int_{A} \sigma_{xx} \mathrm{d} A, \label{eq:normal-force-integral}\\
+    V(X) = \int_{A} \sigma_{xy} \mathrm{d} A, \label{eq:shear-force-integral}\\
+    M(X) = \int_{A} Y \sigma_{xx} \mathrm{d} A, \label{eq:moment-integral}
+\end{align}
+Under the assumptions made, \cref{eq:shear-force-integral} implies that $V(X)$ must be 0, and yet that clearly cannot be as it would again lead to an equilibrium condition that cannot be met in \cref{eq:shear-force-balance}.
+
+The key trick in Euler-Bernoulli beam theory is to avoid this by defining the shear force in terms of the moment with \cref{eq:moment-balance}.
+If we substitute that into \cref{eq:shear-force-balance}, then
+\begin{equation}
+    \frac{\mathrm{d}^{2} M(X)}{\mathrm{d} X^{2}} - q(X) = 0. \label{eq:shear-subbed-balance}
+\end{equation}
+If we first substitute for $\sigma_{xx}$ in the expressions in \cref{eq:normal-force-integral},
+\begin{align}
+    N(X) &= \int_{A} E \mleft[ \frac{\mathrm{d} a(X)}{\mathrm{d} X} + Y \frac{\mathrm{d}^{2} w(X)}{\mathrm{d} X^{2}} \mright] \mathrm{d} A \nonumber\\
+         &= E \frac{\mathrm{d} a(X)}{\mathrm{d} X} \int_{A} \mathrm{d} A + E \frac{\mathrm{d}^{2} w(X)}{\mathrm{d} X^{2}} \int_{A} Y \mathrm{d} A \nonumber\\
+         &= EA \frac{\mathrm{d} a(X)}{\mathrm{d} X},
+\end{align}
+and \cref{eq:moment-integral},
+\begin{align}
+    M(X) &= \int_{A} Y E \mleft[ \frac{\mathrm{d} a(X)}{\mathrm{d} X} + Y \frac{\mathrm{d}^{2} w(X)}{\mathrm{d} X^{2}} \mright] \mathrm{d} A \nonumber\\
+         &= E \frac{\mathrm{d} a(X)}{\mathrm{d} X} \int_{A} Y \mathrm{d} A + E \frac{\mathrm{d}^{2} w(X)}{\mathrm{d} X^{2}} \int_{A} Y^{2} \mathrm{d} A \nonumber\\
+         &= E I \frac{\mathrm{d}^{2} w(X)}{\mathrm{d} X^{2}},
+\end{align}
+where $I$ is known as the second moment of the area, or the moment of inertia, then we can further substitute these expressions into \cref{eq:normal-force-balance},
+\begin{equation}
+    \frac{\mathrm{d}}{\mathrm{d} X} \mleft[ E A \frac{\mathrm{d} a(X)}{\mathrm{d} X} \mright] = -f(X),
+\end{equation}
+and \cref{eq:shear-subbed-balance},
+\begin{equation}
+    \frac{\mathrm{d}^{2}}{\mathrm{d} X^{2}} \mleft[ E I \frac{\mathrm{d}^{2} w(X)}{\mathrm{d} X^{2}} \mright] = q(X),
+\end{equation}
+to derive differential equations that can be independently solved for the unknown functions $a(X)$ and $w(X)$, and thus the deformation vector.
+
+It is easy to show that if no axial forces are applied, then $a(X) = 0$.
+% reword to not say the line is in a single position
+This also implies that the neutral line of the beam, that part which undergoes neither compression nor extension upon bending, will be in the same $X$ position upon bending, which further implies that the contour length will increase.
+With small strains, this difference remains insignificant.
+
+In solving for $w(X)$, which is often referred to as the deflection, if $EI$, which is also referred to as the flexular rigidity, is assumed to be constant along the beam, then we can factor these constants out of the derivatives.
+If the only forces applied to the system are at the boundary, then we can further simplify the expression involving the deflection to
+\begin{equation}
+    EI \frac{\textrm{d}^4 w \mleft( X \mright)}{\textrm{d} X^4} = 0,
+\end{equation}
+and integrate to arrive at the following four equations with four unknowns,
+\begin{align}
+    V &= EIC_{1}, \label{eq:shear-force}\\
+    M \mleft( X \mright) &= -EI ( C_1 X + C_2 ), \label{eq:moment}\\
+    \frac{\textrm{d} w \mleft( X \mright)}{\textrm{d} X} &= \frac{C_1 X^2}{2} + C_2 X + C_3, \label{eq:deflection-slope}\\
+    w \mleft( X \mright) &= \frac{C_1 X^3}{6} + \frac{C_2 X^2}{2} + C_3 X + C_4, \label{eq:deflection}
+\end{align}
+where $C_1$, $C_2$, $C_3$, and $C_4$ are integration constants.
+With four boundary conditions, we can solve for the integration constants.
+
+\section*{Finite element method}
+\label{sec:finite-element-method}
+
+The \ac{FEM} allows approximate solutions to differential equations to be found.
+More precisely, the \ac{FEM} provides a method to approximate weak forms of differential equations.
+While this method can be applied to a broad range of problems, here we will restrict our focus to 2nd order elliptic \acp{PDE} with vector valued solutions.
+We will also restrict further to problems involving Dirichlet boundary conditions that are essential, i.e., setting the solution values at the boundary.
+Let $\mathcal{L}(\vec{u})$ be some differential equation for which we want a solution for $\vec{u}$, where $\vec{u} = \vec{u}(\vec{x})$ is an element of some function space.
+Then, the strong formulation is simply
+\begin{alignat}{2}
+    \mathcal{L}(\vec{u}) &= 0 \quad &&\vec{x} \in \Omega, \nonumber\\
+    \vec{u} &= g(\vec{x}) \quad &&\vec{x} \in \partial \Omega,
+\end{alignat}
+where $\Omega$ is the domain, $\partial \Omega$ is the boundary of the domain, and $g(\vec{x})$ is a function that gives the value of the solution at the boundary.
+% should I actually use linear elasticity as the example? At least say you are using the poisson equation as an example as it is simple
+Using the Poisson equation as a simple example, we have
+\begin{align}
+    \nabla \cdot \nabla \vec{u} + \vec{f} &= 0 \quad \vec{x} \in \Omega, \nonumber\\
+                                     \vec{u} &= 0 \quad \vec{x} \in \partial \Omega,
+\end{align}
+where $\vec{f} = \vec{f}(\vec{x})$ is some vector valued function.
+
+Instead of having a function across its entire domain being equated to 0, it can be more convenient to set a functional of the differential equation to 0, where this is done for each function in some infinite set.
+In the weak formulation, the functional is the inner product of the differential equation with some test function,
+\begin{equation}
+    \langle \vec{v}, \mathcal{L}(\vec{u}) \rangle = 0 \quad \forall \vec{v} \in V,
+\end{equation}
+where $V$ is the space that the test functions exist in.
+The solution space and the test function space are constructed such that the boundary conditions are enforced.
+As the spaces involved are function spaces, the inner product will involve some integral over the domain.
+For the Poisson equation, this becomes
+\begin{align}
+    \langle \vec{v}, \nabla \cdot \nabla \vec{u} + \vec{f} \rangle &= 0 \quad \forall \vec{v} \in V \nonumber\\
+    \int_{\Omega} \vec{v} \cdot (\nabla \cdot \nabla \vec{u}) \mathrm{d} \vec{x} + \int_{\Omega} \vec{v} \cdot \vec{f} \mathrm{d} \vec{x} &= 0 \quad \forall \vec{v} \in V. \label{eq:poisson-weak-formulation}
+\end{align}
+
+The advantage of the weak formulation here has to do with the fact that integration by parts can be applied, which essentially shifts one of the derivatives off of the solution and to the test function.
+By doing this, it is possible to derive solutions that are not second-order differentiable, or in more general terms, are not solutions to the original strong form of the problem.
+To illustrate this, for the first term of the Poisson equation in \cref{eq:poisson-weak-formulation} we have
+\begin{align}
+    \int_{\Omega} \vec{v} \cdot (\nabla \cdot \nabla \vec{u}) \mathrm{d} \vec{x} &= \int_{\Omega} v_{i} \frac{\partial^{2} u_{i}}{\partial x_{j}^{2}} \mathrm{d} \vec{x} \nonumber\\
+                                                                                                   &= \int_{\Omega} \frac{\partial}{\partial x_{i}} \mleft( v_{j} \frac{\partial u_{j}}{\partial x_{i}} \mright) \mathrm{d} \vec{x} - \int_{\Omega} \frac{\partial v_{i}}{\partial x_{j}} \frac{\partial u_{i}}{\partial x_{j}} \mathrm{d} \vec{x} \nonumber\\
+                                                                                                   &= \int_{\partial \Omega} v_{j} \frac{\partial u_{j}}{\partial x_{i}} n_{i} \mathrm{d} s - \int_{\Omega} \frac{\partial v_{i}}{\partial x_{j}} \frac{\partial u_{i}}{\partial x_{j}} \mathrm{d} \vec{x} \nonumber\\
+                                                                                                   &= \int_{\partial \Omega} (\vec{v} \cdot \nabla \vec{u}) \cdot \vec{\hat{n}} \mathrm{d} s - \int_{\Omega} \nabla \vec{v} : \nabla \vec{u} \mathrm{d} \vec{x},
+\end{align}
+where we have integrated by parts and then applied the divergence theorem.
+Because of the boundary conditions here, $\nabla \vec{u} = 0$ everywhere on the boundary, so the first term disappears.
+Overall this gives
+\begin{equation}
+    \int_{\Omega} \nabla \vec{v} : \nabla \vec{u} \mathrm{d} \vec{x} = \int_{\Omega} \vec{v} \cdot \vec{f} \mathrm{d} \vec{x} \quad \forall \vec{v} \in V.
+\end{equation}
+This is also commonly written as a bilinear term $A$ and a linear term $L$,
+\begin{equation}
+    A(\nabla \vec{v}, \nabla \vec{u}) = L(\vec{v}) \quad \forall \vec{v} \in V.
+\end{equation}
+This form is in fact the general form that integration by parts of the weak form is intended to give, with a bilinear term in $\nabla \vec{v}$ and $\nabla \vec{u}$, and a linear term in $\vec{v}$.
+It will be referred to here as the abstract weak form.
+
+% maybe move this to after introducing the building blocks?
+In the \ac{FEM}, $\vec{u}(\vec{x})$ is approximated with a finite sum of local basis functions,
+\begin{equation}
+    \vec{\bar{u}}(\vec{x}) = \sum_{i}^{N} c_{i} \vec{\phi}_{i}(\vec{x}), \label{eq:approx-deformation}
+\end{equation}
+where $\vec{\phi_{i}}$ are the basis functions, $c_{i}$ are their coefficients, and $N$ is the number of basis functions.
+In the Galerkin version of \ac{FEM}, the test functions are selected from the same space as the approximate solution is taken from.%
+\footnote{Actually, the test functions are from the same space that the solution is from with homogeneous boundary conditions, if the solution is decomposed into one for the homogeneous part, and a part that adds the difference between that and the solution with the nonhomogeneous boundary conditions.}
+More specifically, they are restricted to the finite set of the $N$ basis functions used to express $\vec{\bar{u}}$.
+The abstract weak form can then be written as
+\begin{align}
+    A(\nabla [d_{i} \vec{\phi}_{i}], \nabla [c_{j} \vec{\phi}_{j}]) &= L(d_{i} \vec{\phi}_{i}) \nonumber\\
+    A(\nabla \vec{\phi}_{i}, \nabla \vec{\phi}_{j})c_{j} &= L(\vec{\phi}_{i}) \nonumber\\
+    \vec{A} \vec{c} = \vec{L},
+\end{align}
+where now the problem of estimating a solution becomes a linear one in which we must solve for the vector of coefficients $\vec{c}$, where the elements of matrix $\vec{A}$ and vector $\vec{L}$ can be calculated once a basis set has been selected.
+
+By local basis functions, we mean that the problem domain is partitioned into cells, and the basis functions are defined on a cell level.
+The cells are defined by a list of vertices associated with them that demarcate their boundaries.
+In addition to these vertices, there may be additional nodes associated with a cell for use in defining the basis functions.
+These nodes can be shared between more than one cell, or internal to a particular cell.
+Together, the set of cells is referred to as the mesh.
+
+% here you should make clear that the lagrange polynomails are using local indices
+Because we are using the weak formulation, we can select a function space that is only first order differentiable.
+Here and typically, piecewise polynomials are used that are based on Lagrange polynomials.
+Lagrange polynomials are defined such that each basis function is 1 at only a single node, and 0 at all other nodes.
+A Lagrange polynomial is defined as
+\begin{equation}
+    \psi_{i}(x) = \prod_{j \neq i}^{n} \frac{x - x_{j}}{x_{i} - x_{j}},
+\end{equation}
+where $x_i$ are the coordinates of the nodes and $n$ is the number nodes being used, with the resulting polynomial being of degree $n - 1$.
+The Lagrange polynomials are defined on the level of individual cells, and the nodes are indexed locally to the cells, as well as having a global index.
+For 1D problem and an internal node in cell $\Omega_{a}$,
+\begin{equation}
+    \phi_{i}(x) =
+    \begin{cases}
+        \psi_{i, a}(x) & \textrm{if } x \in \Omega_{a}\\
+        0 & \textrm{if } x \notin \Omega_{a},
+    \end{cases}
+\end{equation}
+where $\psi_{i, a}$ is the Lagrange polynomial defined on cell $a$ with global index $i$.
+For a node shared between two cells $\Omega_{a}$ and $\Omega_{b}$,
+\begin{equation}
+    \phi_{i}(x) =
+    \begin{cases}
+        \psi_{i, a} & \textrm{if } x \in \Omega_{a} \textrm{, } x \neq x_{i}\\
+        \psi_{i, b} & \textrm{if } x \in \Omega_{b} \textrm{, } x \neq x_{i}\\
+        1 & \textrm{if } x = x_{i}\\
+        0 & \textrm{if } x \notin \Omega_{a} \cup \Omega_{b},
+    \end{cases}
+\end{equation}
+where the check for $x = 1$ is simply to avoid ambiguity in the expression above, as both $\psi_{i, a}$ and $\psi_{i, b}$ are equal to one at this point.
+For a 3D problem with a scalar solution, the basis functions are the tensor products of the 1D versions,
+\begin{equation}
+    \phi_{ijk}(\vec{x}) = \phi_{i}(x) \phi_{j}(y) \phi_{k}(z).
+\end{equation}
+For a vector valued solution, the basis functions for the scalar case are copied for each component,
+\begin{equation}
+    \vec{\phi}_{ijkl}(\vec{x}) = \phi_{i}(x) \phi_{j}(y) \phi_{k}(z) \unitvec_{l}.
+\end{equation}
+Typically, the nodes are indexed with a single number, and the basis functions then written with a single index, as in \cref{eq:approx-deformation}.
+    
+We are also interested in solving problems that begin with a variational formulation, rather than a strong form \ac{PDE}.
+This is the case when starting with a potential energy function and applying a variational approach, rather than beginning with a balance of momentum.
+% should I explain the variational operator?
+According to Hamilton's principle for conservative forces,
+\begin{equation}
+    \delta I = \delta \int_{t_{1}}^{t_{2}} L \mathrm{d} t = 0,
+\end{equation}
+where $L = T - \Pi$ is the Lagrangian, $T$ is the total kinetic energy, and $\Pi$ is the total potential energy.
+As we are dealing with static problems, $T = 0$, and the potential does not depend on time, so
+\begin{equation}
+    \delta \Pi = 0.
+\end{equation}
+For hyperelastic materials,
+\begin{align}
+    \delta \Pi &= \delta \int_{\Omega} W \mathrm{d} \vec{x} - \delta \int_{\Omega} \vec{f} \cdot \vec{u} \mathrm{d} \vec{x} - \int_{\partial \Omega} \vec{t} \cdot \vec{u} \mathrm{d} s \nonumber\\
+               &= \int_{\Omega} \delta W \mathrm{d} \vec{x} - \int_{\Omega} (\delta \vec{f} \cdot \vec{u} + \vec{f} \cdot \delta \vec{u}) \mathrm{d} \vec{x} - \nonumber\\
+               &\phantom{{}= \int_{\Omega} \delta W \mathrm{d} \vec{x} -} \int_{\partial \Omega} (\delta \vec{t} \cdot \vec{u} + \vec{t} \cdot \delta \vec{u}) \mathrm{d} s \nonumber\\
+               &= \int_{\Omega} \delta W \mathrm{d} \vec{x} - \int_{\Omega} \vec{f} \cdot \delta \vec{u} \mathrm{d} \vec{x} - \int_{\partial \Omega} \vec{t} \cdot \delta \vec{u} \mathrm{d} s,
+\end{align}
+where the $\delta \vec{f}$ and $\delta \vec{t}$ terms are eliminated as they do not depend on $\vec{u}$.
+As we do not consider body forces or traction force boundary conditions, we can further simplify to
+\begin{equation}
+    \delta \Pi = \int_{\Omega} \delta W \mathrm{d} \vec{x}.
+\end{equation}
+To derive the weak formulation needed for the \ac{FEM}, we will need to replace the $\delta \vec{u}$ terms with the test function.
+As an example, we can derive the weak form for linear elasticity from its energy density function,
+\begin{align}
+    \delta W(\vec{\epsilon}) &= \frac{1}{2} \lambda \delta(\epsilon_{ii} \epsilon_{jj}) + \mu \delta(\epsilon_{ij} \epsilon_{ij}) \nonumber\\
+                             &= \lambda \epsilon_{ii} \delta \epsilon_{jj} + 2 \mu \epsilon_{ij} \delta \epsilon_{ij} \nonumber\\
+                             &= \lambda \epsilon_{ii} \delta_{jk} \delta \epsilon_{jk} + 2 \mu \epsilon_{ij} \delta \epsilon_{ij}.
+\end{align}
+We then must find the variation of the infinitesimal strain tensor,
+\begin{align}
+    \delta \vec{\epsilon} &= \frac{1}{2} \delta \mleft( \frac{\partial u_{i}}{\partial x_{j}} + \frac{\partial u_{j}}{x_{i}} \mright) \unitvec_{i} \otimes \unitvec_{j} \nonumber\\
+    \delta \vec{\epsilon} &= \frac{1}{2} \mleft( \frac{\partial \delta u_{i}}{\partial x_{j}} + \frac{\partial \delta u_{j}}{x_{i}} \mright) \unitvec_{i} \otimes \unitvec_{j}.
+\end{align}
+If we plug this back into the expression for the strain energy density function,
+\begin{equation}
+    \delta W(\vec{\epsilon}) = \lambda \mleft( \frac{\partial u_{i}}{\partial x_{i}} \frac{\partial \delta u_{j}}{\partial x_{j}} \mright) + \mu \mleft( \mleft[ \frac{\partial u_{i}}{\partial x_{j}} + \frac{\partial u_{j}}{\partial x_{i}} \mright] \mleft[ \frac{\partial \delta u_{i}}{\partial x_{j}} + \frac{\partial \delta u_{j}}{\partial x_{i}} \mright] \mright).
+\end{equation}
+Plugging this back into the total energy integral, we now have an expression that is bilinear in $\vec{u}$ and $\delta \vec{u}$, so if we then replace $\delta \vec{u}$ with a test function, we have the desired weak formulation.
+
+To use the \ac{FEM} for nonlinear problems, a method of converting the problem into a series of converging linear problems is needed.
+Fixed point iteration methods are typically used.
+The general idea of a fixed point iteration is to first choose a function $g(\vec{u})$ such that $\vec{u} = g(\vec{u})$ is also a solution to the nonlinear differential equation $\mathcal{L}(\vec{u}) = 0$.
+The function chosen must have the property that it converges to the solution with iterative updates to $\vec{u}$.
+Then, the general iteration is $\vec{u}_{k + 1} = g(\vec{u}_{k})$.
+Newton's method is one particular selection for $g(\vec{u})$, where
+\begin{align}
+    g(\vec{u}) &= \vec{u} - [\mathcal{L}^{'}(\vec{u})]^{-1} \mathcal{L}(\vec{u}) \nonumber\\
+               &\longrightarrow \vec{u}_{k + 1} = \vec{u}_{k} - [\mathcal{L}^{'}(\vec{u})]^{-1} \mathcal{L}(\vec{u}) \nonumber\\
+               &\longrightarrow \mathcal{L}^{'}(\vec{u}_{k}) \delta \vec{u}_{k} = - \mathcal{L}(\vec{u}_{k}),
+\end{align}
+where $\delta \vec{u} = \vec{u}_{k + 1} - \vec{u}_{k}$, and $\mathcal{L}^{'}(\vec{u})$ is the directional derivative of the differential equation, which is itself a linear operator that takes the direction of the derivative as an argument.
+We have used $\delta \vec{u}$ as the notation for the update to the solution as it will take the place of the variation of $\vec{u}$, which comes about from taking the directional derivative, once $\mathcal{L}^{'}(\vec{u})$ is applied to it.
+We can then construct the weak formulation of this expression to use the \ac{FEM} to solve for $\delta \vec{u}$,
+\begin{equation}
+    \langle \vec{v}, \mathcal{L}^{'}(\vec{u}_{k}) \delta \vec{u}_{k} \rangle = - \langle \vec{v}, \mathcal{L}(\vec{u}_{k}) \rangle,
+\end{equation}
+and integrate by parts to arrive at the abstract weak form,
+\begin{equation}
+    A(\nabla \vec{v}, \nabla \delta \vec{u}) = L(\vec{v}).
+\end{equation}
+
+Actually carrying out calculations with the \ac{FEM} involves many further details at a level below the problem formulation.
+Creating a mesh for simple geometries can be done by hand, but more complex geometries may require algorithms to decide where to place nodes and connect them into cells.
+In calculating the elements of the bilinear and linear terms of the weak formulation, much time can be saved by performing the integrals once on a reference cell and mapping to the particular geometry of each cell in the system.
+The integrals themselves are typically not able to be solved analytically, and so some numerical integration algorithm is usually employed.
+Once the linear system has been assembled, some solver must be employed to calculate the solution coefficients.
+While a direct solver might be used, if the system is large, it may be necessary to apply an iterative solver like the conjugate gradient method instead.
+
+Boundary conditions are implemented as constraints on the solution.
+It is common to refer to the basis functions and associated coefficients as the degrees of freedom.
+In general, if a constraint on the solution can be expressed as a linear combination of the degrees of freedom in the system, then it is possible to incorporate the constraints into the \ac{FEM} estimate.
+The boundary conditions and any other conditions can be combined into a matrix of weights that is applied to the solution coefficient vector and set equal to the inhomogeneities, if inhomogeneous constraints are included.
+It is then possible to modify the linear equation for the unconstrained system to incorporate the constraints and solve for the desired constrained solution.
+
+% mention that you can use automatic differentiation and start from the potential energy function for nonlinear problems?
+% deriving things from the estimate
+% sparse matrices
